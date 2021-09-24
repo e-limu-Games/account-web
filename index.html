@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-<meta charset="utf-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords">
     <meta name="description" content="e-limu user account management">
@@ -13,11 +13,27 @@
     <body>
         <div class="container">
             <img class="logo" src="e-limu-logo.png">
-            <h4>User Account Management</h4>            
-            <p>Coming Soon..</p>
+            <h4>User Account Management</h4>  
+            <p id="temp"></p>          
+            <div class="form">
+                <input class="input-control" type="text" id="email-address" placeholder="parent's email address" />
+                <button class="btn" id="sign-in">Signin</button>
+            </div>
         </div>
 
         <script src="anime.min.js"></script>
-        <script src="script.js"></script>
+        <script src="bg-script.js"></script>
+        <script>
+            const emailAddress = document.getElementById("email-address");
+            const signinBtn = document.getElementById("sign-in");
+
+            signinBtn.addEventListener("click", (e) => {
+                document.getElementById("temp").innerHTML = emailAddress.value;
+                parent.c3_callFunction("GetEmail",[emailAddress.value]);
+            });
+            function app_listen(data){
+                document.getElementById("temp").innerHTML = data;
+            }
+        </script>
     </body>
 </html>
