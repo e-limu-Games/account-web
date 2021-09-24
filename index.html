@@ -12,27 +12,57 @@
     </head>
     <body>
         <div class="container">
+            <p id="app-name"></p>          
             <img class="logo" src="e-limu-logo.png">
             <h4>User Account Management</h4>  
             <p id="temp"></p>          
             <div class="form">
                 <input class="input-control" type="text" id="email-address" placeholder="parent's email address" />
-                <button class="btn" id="sign-in">Signin</button>
+                <button class="btn btn-primary" id="sign-in-btn">Signin</button>
+                <button class="btn btn-danger" id="cancel-btn">Cancel</button>
             </div>
         </div>
 
         <script src="anime.min.js"></script>
         <script src="bg-script.js"></script>
         <script>
+            let parentSource;
             const emailAddress = document.getElementById("email-address");
-            const signinBtn = document.getElementById("sign-in");
+            const signinBtn = document.getElementById("sign-in-btn");
+            const cancelBtn = document.getElementById("cancel-btn");
 
             signinBtn.addEventListener("click", (e) => {
-                document.getElementById("temp").innerHTML = emailAddress.value;
-                parent.c3_callFunction("GetEmail",[emailAddress.value]);
+                const requestData = {
+                    action: "LOGIN",
+                    payload: emailAddress.value,
+                };
+                sendMessage(requestData);
             });
-            function app_listen(data){
-                document.getElementById("temp").innerHTML = data;
+
+            cancelBtn.addEventListener("click", (e) => {
+                const requestData = {
+                    action: "CLOSE",
+                    payload: "",
+                };
+                sendMessage(requestData);
+            });
+
+            window.addEventListener('message', e => {
+                parentSource = e.origin;
+                if(e.data.app_name)
+                    document.getElementById("app-name").innerHTML = e.data.app_name;
+                // if (event.origin.startsWith('http://your-first-site.com')) { 
+                //     console.log(event.data); 
+                // } else {
+                //     return; 
+                // } 
+            }); 
+
+            function sendMessage(messageContent){
+                parent.postMessage(
+                    messageContent,
+                    parentSource
+                );
             }
         </script>
     </body>
